@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="plugins/elementui/index.css">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="hold-transition">
+<div id="login" style="width: 500px;height: 400px;margin-top: 150px;margin-left: 400px;">
+    <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="80px">
+        <el-form-item label="账号" prop="username">
+            <el-input v-model="loginForm.username" auto-complete="off" style="width: 300px;"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+            <el-input type="password" v-model="loginForm.password" auto-complete="off" style="width: 300px;"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" size="mini" style="width: 300px;height: 50px;font-size: 30px;"  @click="onLogin()">登录</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+</body>
+<!-- 引入组件库 -->
+<script src="js/vue.js"></script>
+<script src="plugins/elementui/index.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<script>
+    var vue = new Vue({
+        el: '#login',
+        data() {
+            return {
+                loginForm: {
+                    username: '',
+                    password: ''
+                },
+                rules: {
+                    username: [
+                        { required: true, message: '请输入账号', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: '请输入密码', trigger: 'blur' }
+                    ]
+                }
+            };
+        },
+        methods: {
+            //登录
+            onLogin() {
+                const url = "/user/login";
+                //console.log(param)
+                axios.post(url,this.loginForm).then((res)=>{
+                    //判断当前操作是否成功
+                    if (res.data.code===200) {
+                        //1.关闭弹层
+                        this.dialogFormVisible = false;
+                        this.$message.success("登录完成");
+                        window.location.replace("http://localhost:9000");
+                    } else {
+                        this.$message.error("登录失败");
+                    }
+                });
+            }
+        }
+    })
+</script>
+</html>

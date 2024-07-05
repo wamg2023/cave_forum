@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="plugins/elementui/index.css">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="index">
+    <p>Welcome, <span id="username">{{ username }}</span>!</p>
+</div>
+</body>
+
+<!-- 引入组件库 -->
+<script src="js/vue.js"></script>
+<script src="plugins/elementui/index.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<script>
+    const vue = new Vue({
+        el: '#index',
+        data() {
+            return{
+
+            };
+        },
+        created(){
+            //默认的执行代码
+            this.myMethod();
+        },
+        methods: {
+            myMethod(){
+                axios.get("user/cookie").then((res)=>{
+                    document.getElementById("username").innerHTML=res.data;
+                });
+            }
+        },
+    })
+</script>
+</html>
