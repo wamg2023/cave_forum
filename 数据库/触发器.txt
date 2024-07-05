@@ -1,0 +1,15 @@
+/*
+user(user_id)--post(user_id)
+user(user_id)--comment(user_id)
+*/
+DROP TRIGGER IF EXISTS after_user_delete ;
+DELIMITER //  
+CREATE TRIGGER after_user_delete  
+AFTER DELETE ON user  
+FOR EACH ROW  
+BEGIN  
+    DELETE FROM post WHERE user_id = OLD.user_id; 
+    DELETE FROM comment WHERE user_id = OLD.user_id; 
+END;  
+//  
+DELIMITER ;
