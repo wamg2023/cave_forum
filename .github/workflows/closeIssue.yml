@@ -1,25 +1,25 @@
-name: Close Issues on Specific Commit Messages  
+name: Close Issues on Specific Commit Messages
+
+on:
+  push:
+    branches:
+      - master
   
-on:  
-  push:  
-    branches:  
-      - master  
+jobs:
+  close-issue-based-on-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
   
-jobs:  
-  close-issue-based-on-commit:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Checkout code  
-        uses: actions/checkout@v3  
+      - name: Check commit message and close issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.FORUM_TOKEN }}
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
   
-      - name: Check commit message and close issues  
-        env:  
-          GITHUB_TOKEN: ${{ secrets.FORUM_TOKEN }}  
-        run: |  
-          COMMIT_MSG=$(git log -1 --pretty=%B)  
-  
-          # Define target commit messages and corresponding issue numbers  
-          declare -A TARGET_MESSAGES  
+          # Define target commit messages and corresponding issue numbers
+          declare -A TARGET_MESSAGES
           TARGET_MESSAGES["1.0101--项目规划_文档编写_需求文档编写--何泽中--2024/07/03"]=2
           TARGET_MESSAGES["1.0102--项目规划_文档编写_功能文档编写--何泽中--2024/07/03"]=3
           TARGET_MESSAGES["1.0201--项目规划_图片绘制_简易ui绘制--何泽中--2024/07/03"]=4
@@ -52,7 +52,7 @@ jobs:
                 -H "Accept: application/vnd.github.v3+json" \  
                 -H "Authorization: token $GITHUB_TOKEN" \  
                 -d '{"state": "closed"}' \  
-                https://api.github.com/repos/cave_forum/issues/$ISSUE_NUMBER  
+                "https://api.github.com/repos/cave_forum/issues/$ISSUE_NUMBER"
               break # Stop the loop once a match is found  
             fi  
           done  
