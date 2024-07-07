@@ -6,7 +6,7 @@ spring:
     datasource:
         druid:
             driver-class-name: com.mysql.cj.jdbc.Driver
-            url: jdbc:mysql://localhost:3306/springboot?serverTimezone=UTC
+            url: jdbc:mysql://localhost:3306/cave_ adventure_forum?serverTimezone=UTC
             username: root
             password: 123456
 
@@ -45,7 +45,6 @@ spring:
 mybatis-plus:
     global-config:
         db-config:
-            table-prefix: tb_		#设置表名通用前缀
             id-type: auto				#设置主键id字段的生成策略为参照数据库设定的策略，当前数据库设置id生成策略为自增
 
     #运行日志配置

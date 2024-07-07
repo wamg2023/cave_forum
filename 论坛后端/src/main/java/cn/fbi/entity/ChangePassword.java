@@ -2,6 +2,9 @@ package cn.fbi.entity;
 
 import lombok.Data;
 
+/**
+ * 忘记密码实体类
+ * */
 @Data
 public class ChangePassword {
     private String username;
