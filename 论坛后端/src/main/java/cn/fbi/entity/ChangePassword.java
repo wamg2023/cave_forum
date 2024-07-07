@@ -11,4 +11,5 @@ public class ChangePassword {
     private String old_password;
     private String new_password;
     private String again_new_password;
+    private String verifyCode;
 }
