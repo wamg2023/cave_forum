@@ -2,19 +2,11 @@ package cn.fbi.control;
 
 import cn.fbi.common.Result;
 import cn.fbi.entity.ChangePassword;
-import cn.fbi.entity.RedisUser;
 import cn.fbi.entity.User;
-import cn.fbi.mapper.UserMapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import cn.fbi.service.UserService;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
-import java.time.Duration;
-import java.util.List;
 
 /**
  *
@@ -23,29 +15,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-    @Autowired
+    @Resource
+    private UserService userService;
+    /*@Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private ThreadService threadService;*/
 
     @PostMapping ("/register")
     public Result register(@RequestBody User user){
-
-    }
-
-
-
-    @PostMapping ("/register")
-    public Result register(@RequestBody User user){
-      /*  String account=user.getUsername();
-        QueryWrapper<User> qw=new QueryWrapper<>();
-        qw.eq("username",account);
-        User tempUser=userMapper.selectOne(qw);
-        if(tempUser==null){
-            userMapper.insert(user);
-            return Result.Success("注册成功！");
-        }
-        else
-           return Result.Error("注册失败,用户名已存在！");*/
+        return userService.Register(user);
     }
 
     //登录功能
@@ -61,6 +42,7 @@ public class UserController {
         }
         else
             return Result.Error("用户名或密码错误!");*/
+        return Result.Success("ss");
     }
 
     //注销功能,删除表
@@ -78,12 +60,13 @@ public class UserController {
             userMapper.delete(qw);
             return Result.Success("用户注销成功！");
         }*/
+        return Result.Success("ss");
     }
 
-    //修改表
-    @PostMapping("/ChangePw")
+    //普通修改密码
+    @PostMapping("/changePwdByAccount")
     public Result ChangePw(@RequestBody ChangePassword changePassword){
-       /* //读取数据
+        /*//读取数据
         String Username =changePassword.getUsername();
         String OldPassWord=changePassword.getOld_password();
         String NewPassword=changePassword.getNew_password();
@@ -108,17 +91,48 @@ public class UserController {
         }else{
             return Result.Error("两次新密码输入不一致，请重新输入");
         }*/
+        return null;
+    }
+
+    @PostMapping("/changePwdByEmail")
+    public Result ChangePwByMail(@RequestBody ChangePassword changePassword){
+      /*  String storedVerifyCode = (String) redisTemplate.opsForValue().get("verifyCode");
+        if (storedVerifyCode == null) {
+            return Result.Error("邮箱验证码已过期，请重新获取验证码！");
+        }
+        String userVerifyCode = changePassword.getVerifyCode();
+        if (!storedVerifyCode.equals(userVerifyCode)) {
+            return Result.Error("邮箱验证码不正确，请重新输入验证码");
+        }
+        //读取数据
+        String Username =changePassword.getUsername();
+        String OldPassWord=changePassword.getOld_password();
+        String NewPassword=changePassword.getNew_password();
+        String AgainNewPassWord=changePassword.getAgain_new_password();
+        //判断用户名和旧密码是否对应，即确报用户本人修改
+
+
+        if (tempUser!=null){
+            //修改密码
+            UpdateWrapper<User> uW = new UpdateWrapper<>();
+            uW.eq("username", Username);
+            User user = new User();
+            user.setPassword(NewPassword);
+            userMapper.update(user,uW);
+            return Result.Success("密码修改成功");
+        }
+        else{
+            return Result.Error("用户名或密码输入错误");
+        }*/
+        return null;
+
     }
 
 
-    /**
-     * 7.3号更新
-     * sss
-     * */
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
-    @GetMapping("/redis")
+
+
+    /*@GetMapping("/redis")
     public void getRedis() {
         redisTemplate.opsForValue().set("name","卷心");
         String name = (String) redisTemplate.opsForValue().get("name");
@@ -130,7 +144,7 @@ public class UserController {
         redisTemplate.opsForValue().set("user",user, Duration.ofMinutes(5));
         return (RedisUser)redisTemplate.opsForValue().get("user");
     }
-
+*/
 
     /**
      * 7.
@@ -141,6 +155,7 @@ public class UserController {
         /*IPage<User> page = new Page<>(current, pagesize);
         userMapper.selectPage(page, null);
         return Result.Success("查询成功",  userMapper.selectPage(page, null));*/
+        return Result.Success("ss");
     }
 
     //@GetMapping("{id}"):使用浏览器地址访问传递参数的方法请求
@@ -154,12 +169,14 @@ public class UserController {
         }else {
             return Result.Error("查询失败！，没有这个Id为"+id+"对应的数据");
         }*/
+        return Result.Success("ss");
     }
 
     @GetMapping
     public Result getlist() throws IOException{
        /* if (userMapper.selectList(null)!=null)throw new IOException();
         return Result.Success("执行查询完成！",userMapper.selectList(null));*/
+        return Result.Success("ss");
     }
 
     //4.分页查询-模糊查询
@@ -193,6 +210,7 @@ public class UserController {
         }else {
             return Result.Success("查询完成！",page);
         }*/
+        return Result.Success("ss");
     }
 
     @PostMapping("/add")
@@ -207,6 +225,7 @@ public class UserController {
         }
         else
             return Result.Error("添加失败,用户名已存在！");*/
+        return Result.Success("ss");
     }
 
     @PostMapping("/update")
@@ -219,6 +238,7 @@ public class UserController {
         }else {
             return Result.Error("修改失败！");
         }*/
+        return Result.Success("ss");
 
     }
 
@@ -233,6 +253,7 @@ public class UserController {
         }else {
             return Result.Error("请重新执行删除！");
         }*/
+        return Result.Success("ss");
     }
 
 
