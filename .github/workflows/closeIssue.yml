@@ -52,7 +52,7 @@ jobs:
                 -H "Accept: application/vnd.github.v3+json" \  
                 -H "Authorization: token $GITHUB_TOKEN" \  
                 -d '{"state": "closed"}' \  
-                "https://api.github.com/repos/cave_forum/issues/${ISSUE_NUMBER}"
+                "https://api.github.com/repos/cave_forum/issues/2"
               break # Stop the loop once a match is found  
             fi  
           done  
