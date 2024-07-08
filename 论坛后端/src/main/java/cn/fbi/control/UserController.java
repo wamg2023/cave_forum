@@ -17,32 +17,16 @@ import java.io.IOException;
 public class UserController {
     @Resource
     private UserService userService;
-    /*@Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
-    private ThreadService threadService;*/
-
+    /** 用户注册 */
     @PostMapping ("/register")
     public Result register(@RequestBody User user){
         return userService.Register(user);
     }
 
-    //登录功能
-    @PostMapping("/login")
-    public Result login(@RequestBody User user){
-
-      /*  String username = user.getUsername();
-        String password = user.getPassword();
-        User tempUser=userMapper.selectUserID(username,password);
-        if(tempUser!=null){
-            redisTemplate.opsForValue().set("user",user);
-            return Result.Success("登录成功！");
-        }
-        else
-            return Result.Error("用户名或密码错误!");*/
-        return Result.Success("ss");
+    /** 用户登录，通过账号密码进行登录 */
+    @PostMapping("/loginByAccount")
+    public Result loginByAccount(@RequestBody User user){
+        return userService.loginByAccount(user);
     }
 
     //注销功能,删除表

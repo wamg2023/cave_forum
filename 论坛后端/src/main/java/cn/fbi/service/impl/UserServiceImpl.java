@@ -1,5 +1,6 @@
 package cn.fbi.service.impl;
 import cn.fbi.common.Result;
+import cn.fbi.control.EmailController;
 import cn.fbi.control.UserController;
 import cn.fbi.entity.User;
 import cn.fbi.mapper.UserMapper;
@@ -9,9 +10,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 
@@ -26,8 +29,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public  List<User> getUser(){
+    public   List<User> getUser(){
         return userMapper.selectList(null);
     }
 
@@ -93,6 +98,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     // 返回注册成功的结果
                     return Result.Success("注册成功");
             }
+    }
+
+    /** 账密登录方法实现 */
+    public Result loginByAccount(User user){
+        String account = user.getAccount();
+        String password = user.getPassword();
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        //定义登录查询函数
+        qw.eq("account",account).eq("password",password);
+        User loginUser=userMapper.selectOne(qw);
+        if(loginUser!=null){
+            //10min内免登录，可以直接从缓存表中读取用户信息，未必会用
+            redisTemplate.opsForValue().set("loginUser",loginUser, Duration.ofMinutes(10));
+            //生成日志
+            /*int user_id=loginUser.getUser_id();
+            logger.info("用户登录成功！！！当前用户的ID是:  "+user_id );*/
+            logger.info("用户登录成功！！！当前用户的ID是:  ");
+            return Result.Success("登录成功！",loginUser);
+        }
+        else{
+            logger.info("用户登录失败 ");
+            return Result.Error("用户名或密码错误!请重新输入！");
+        }
+
     }
 
     
