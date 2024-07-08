@@ -3,11 +3,9 @@ package cn.fbi.control;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +23,6 @@ public class FileController {
         if (!file.getContentType().startsWith("image")) {
             return "文件格式不支持";
         }
-
         // 生成文件名
         String fileName = userId + "Avatar.png";
 
