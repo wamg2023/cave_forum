@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `user_id` int(15) NOT NULL AUTO_INCREMENT COMMENT '用户id',
-  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '用户类型，0是管理员，1是用户',
+  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '用户类型。0是管理员，1是用户',
   `account` varchar(15) NOT NULL DEFAULT '账号' COMMENT '用户账号',
   `password` varchar(15) NOT NULL DEFAULT '密码' COMMENT '用户密码',
   `nickname` varchar(10) NOT NULL DEFAULT '昵称' COMMENT '用户昵称',
