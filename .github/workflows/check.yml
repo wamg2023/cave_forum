@@ -1,0 +1,26 @@
+name: Javadoc Check
+
+on:
+  push:
+    branches:
+      - master  # 指定主分支
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '22'  # 使用Java 22或更高版本
+          distribution: 'adopt'
+          
+      - name: Build with Maven
+        run: mvn clean install  # 使用Maven构建项目，确保项目可以正常构建
+        
+      - name: Check Javadoc comments
+        run: mvn javadoc:javadoc  # 生成并验证Javadoc文档
