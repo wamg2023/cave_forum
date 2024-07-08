@@ -1,30 +1,26 @@
-name: Javadoc Check  
-  
-on:  
-  push:  
-    branches:  
-      - master  # 指定主分支  
-  
-jobs:  
-  check:  
-    runs-on: ubuntu-latest  
-      
-    steps:  
-      - name: Checkout code  
-        uses: actions/checkout@v2  
+name: Javadoc Check
+
+on:
+  push:
+    branches:
+      - master  # 指定主分支
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'  # 使用Java 17或更高版本
+          distribution: 'adopt'
           
-      - name: Set up JDK  
-        uses: actions/setup-java@v2  
-        with:  
-          java-version: '17'  # 注意：Java 22 不是一个有效的版本，这里我假设你想使用Java 17  
-          distribution: 'adopt'  
-            
-      - name: Build with Maven  
-        run: |  
-          cd path/to/your/maven/project  # 更改到Maven项目的子目录  
-          mvn clean install  # 使用Maven构建项目，确保项目可以正常构建  
-          
-      - name: Check Javadoc comments  
-        run: |  
-          cd path/to/your/maven/project  # 如果有必要，再次更改到Maven项目的子目录（如果上一个步骤已经更改了，则可能不需要）  
-          mvn javadoc:javadoc  # 生成并验证Javadoc文档
+      - name: Build with Maven
+        run: mvn clean install  # 使用Maven构建项目，确保项目可以正常构建
+        
+      - name: Check Javadoc comments
+        run: mvn javadoc:javadoc  # 生成并验证Javadoc文档
