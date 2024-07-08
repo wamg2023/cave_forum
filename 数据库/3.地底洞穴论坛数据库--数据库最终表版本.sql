@@ -2,7 +2,8 @@
 SQLyog Ultimate v11.24 (32 bit)
 MySQL - 5.7.44-log : Database - cave_adventure_forum
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -21,15 +22,15 @@ USE `cave_adventure_forum`;
 DROP TABLE IF EXISTS `comment`;
 
 CREATE TABLE `comment` (
-  `commentId` int(15) NOT NULL AUTO_INCREMENT COMMENT '评论id',
+  `comment_id` int(15) NOT NULL AUTO_INCREMENT COMMENT '评论id',
   `content` varchar(100) NOT NULL DEFAULT '内容' COMMENT '评论内容',
-  `createTime` date NOT NULL DEFAULT '2000-01-01' COMMENT '评论时间',
-  `commentLikeCount` int(15) DEFAULT '0' COMMENT '评论点赞数',
-  `commentCommentCount` int(15) DEFAULT '0' COMMENT '评论评论数',
+  `create_time` date NOT NULL DEFAULT '2000-01-01' COMMENT '评论时间',
+  `comment_like_count` int(15) DEFAULT '0' COMMENT '评论点赞数',
+  `comment_comment_count` int(15) DEFAULT '0' COMMENT '评论评论数',
   `userId` int(15) NOT NULL COMMENT '评论的用户id',
   `postId` int(15) NOT NULL COMMENT '评论的帖子id',
-  `rootCommentId` int(15) DEFAULT '-1' COMMENT '评论的根评论',
-  `toCommentId` int(15) DEFAULT '-1' COMMENT '评论的回复评论',
+  `root_comment_id` int(15) DEFAULT '-1' COMMENT '评论的根评论',
+  `to_comment_id` int(15) DEFAULT '-1' COMMENT '评论的回复评论',
   PRIMARY KEY (`commentId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk;
 
@@ -40,16 +41,16 @@ CREATE TABLE `comment` (
 DROP TABLE IF EXISTS `post`;
 
 CREATE TABLE `post` (
-  `postId` int(15) NOT NULL AUTO_INCREMENT COMMENT '帖子id',
+  `post_id` int(15) NOT NULL AUTO_INCREMENT COMMENT '帖子id',
   `title` varchar(20) NOT NULL DEFAULT '标题' COMMENT '帖子标题',
   `content` varchar(10000) NOT NULL DEFAULT '内容' COMMENT '帖子内容',
-  `createTime` date NOT NULL DEFAULT '2000-01-01' COMMENT '帖子发布时间',
+  `create_time` date NOT NULL DEFAULT '2000-01-01' COMMENT '帖子发布时间',
   `cover` varchar(100) NOT NULL DEFAULT '$(postId)Avatar.png' COMMENT '帖子封面',
-  `postLikeCount` int(15) DEFAULT '0' COMMENT '帖子点赞数',
-  `postBookmarkCount` int(15) DEFAULT '0' COMMENT '帖子收藏数',
-  `postCommentCount` int(15) DEFAULT '0' COMMENT '帖子评论数',
-  `tagId` varchar(5000) NOT NULL COMMENT '帖子tag',
-  `userId` int(15) DEFAULT NULL COMMENT '作者的用户id',
+  `post_like_count` int(15) DEFAULT '0' COMMENT '帖子点赞数',
+  `post_bookmark_count` int(15) DEFAULT '0' COMMENT '帖子收藏数',
+  `post_comment_count` int(15) DEFAULT '0' COMMENT '帖子评论数',
+  `tag_id` varchar(5000) NOT NULL COMMENT '帖子tag',
+  `user_id` int(15) DEFAULT NULL COMMENT '作者的用户id',
   PRIMARY KEY (`postId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk;
 
@@ -60,7 +61,7 @@ CREATE TABLE `post` (
 DROP TABLE IF EXISTS `tag`;
 
 CREATE TABLE `tag` (
-  `tagId` int(15) NOT NULL AUTO_INCREMENT,
+  `tag_id` int(15) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT 'tag名字' COMMENT 'tag名字',
   PRIMARY KEY (`tagId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk;
@@ -72,7 +73,7 @@ CREATE TABLE `tag` (
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
-  `userId` int(15) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `user_id` int(15) NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '用户类型，0是管理员，1是用户',
   `account` varchar(15) NOT NULL DEFAULT '账号' COMMENT '用户账号',
   `password` varchar(15) NOT NULL DEFAULT '密码' COMMENT '用户密码',
@@ -80,10 +81,10 @@ CREATE TABLE `user` (
   `birthday` date NOT NULL DEFAULT '2000-01-01' COMMENT '用户出生年月日',
   `email` varchar(100) NOT NULL DEFAULT 'test@itcast.cn' COMMENT '用户邮箱',
   `avatar` varchar(100) NOT NULL DEFAULT '$(userId)Avatar.png' COMMENT '用户头像',
-  `followUser` varchar(5000) DEFAULT 'null' COMMENT '关注的用户',
-  `likePost` varchar(5000) DEFAULT 'null' COMMENT '点赞的帖子',
-  `favoritePost` varchar(5000) DEFAULT 'null' COMMENT '收藏的帖子',
-  `likeComment` varchar(5000) DEFAULT 'null' COMMENT '点赞的评论',
+  `follow_user` varchar(5000) DEFAULT 'null' COMMENT '关注的用户',
+  `like_post` varchar(5000) DEFAULT 'null' COMMENT '点赞的帖子',
+  `bookmark_post` varchar(5000) DEFAULT 'null' COMMENT '收藏的帖子',
+  `like_comment` varchar(5000) DEFAULT 'null' COMMENT '点赞的评论',
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk;
 
