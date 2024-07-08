@@ -1,35 +1,33 @@
 server:
     port: 9000
 
-#数据库连接配置
+# 文件上传目录配置
+file:
+    upload-dir: files/
+
+# 数据库连接配置
 spring:
     datasource:
         druid:
             driver-class-name: com.mysql.cj.jdbc.Driver
-            url: jdbc:mysql://localhost:3306/springboot?serverTimezone=UTC
+            url: jdbc:mysql://localhost:3306/cave_adventure_forum?serverTimezone=UTC
             username: root
             password: 123456
 
-        data:
-            redis:
-                host: localhost
-                port: 6379
-                #    password: 123456
-                database: 0 # 数据库索引，默认0
-                timeout: 5000  # 连接超时，单位ms
+    data:
+        redis:
+            host: localhost
+            port: 6379
+            database: 0
+            timeout: 5000
+
     mail:
-        # smtp服务主机
         host: smtp.163.com
-        # 服务协议 smtp为发送邮件
         protocol: smtp
-        # 编码集
         default-encoding: UTF-8
-        # 发送邮件的账户
         username: 15294798563@163.com
-        # 授权码 邮箱服务器提供的授权码，不是你邮箱的密码
         password: OMYYDXPVXDXNEBUL
         port: 465
-        # 开启一些权限
         test-connection: true
         properties:
             mail:
@@ -41,13 +39,15 @@ spring:
                         enable: true
                         required: true
 
-
+# MyBatis Plus配置
 mybatis-plus:
     global-config:
         db-config:
-            table-prefix: tb_		#设置表名通用前缀
-            id-type: auto				#设置主键id字段的生成策略为参照数据库设定的策略，当前数据库设置id生成策略为自增
+            id-type: auto
 
-    #运行日志配置
+# 日志配置
+logging:
+    level:
+        root: info
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
