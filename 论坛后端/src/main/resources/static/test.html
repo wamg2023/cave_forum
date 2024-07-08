@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传与下载</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<input type="file" id="fileInput">
+<button onclick="uploadFile()">上传文件</button>
+<div id="uploadResult"></div>
+
+<hr>
+
+<button onclick="downloadFile()">下载头像</button>
+<div id="downloadedImage"></div>
+
+<script>
+    function uploadFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+        var userId = '631210'; // 替换为实际的用户ID
+
+        var formData = new FormData();
+        formData.append("file", file);
+
+        $.ajax({
+            type: "POST",
+            url: "/file/upload/" + userId,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log("上传成功:", response);
+                $('#uploadResult').text(response);
+            },
+            error: function(error) {
+                console.error("上传失败:", error);
+                $('#uploadResult').text("上传失败");
+            }
+        });
+    }
+
+    function downloadFile() {
+        var userId = '631210'; // 替换为实际的用户ID
+        var downloadUrl = "/file/download/" + userId;
+
+        $.ajax({
+            type: "GET",
+            url: downloadUrl,
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function(blob) {
+                var imageUrl = URL.createObjectURL(blob);
+                $('#downloadedImage').html('<img src="' + imageUrl + '" width="200" height="200">');
+            },
+            error: function(error) {
+                console.error("下载失败:", error);
+                $('#downloadedImage').text("下载失败");
+            }
+        });
+    }
+</script>
+</body>
+</html>
