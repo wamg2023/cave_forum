@@ -16,7 +16,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '22'  # 使用Java 22或更高版本
+          java-version: '17'  # 使用Java 17或更高版本
           distribution: 'adopt'
           
       - name: Build with Maven
