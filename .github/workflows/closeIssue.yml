@@ -14,7 +14,7 @@ jobs:
   
       - name: Check commit message and close issues
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WSK_FORUM_TOKEN }}
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
   
@@ -52,7 +52,7 @@ jobs:
                 -H "Accept: application/vnd.github.v3+json" \
                 -H "Authorization: token $GITHUB_TOKEN" \
                 -d '{"state": "closed"}' \
-                "https://api.github.com/repos/wamg2023/cave_forum/issues/$ISSUE_NUMBER"
+                "https://github.com/wamg2023/cave_forum/issues/$ISSUE_NUMBER"
               break # 找到匹配项后停止循环
             fi  
           done
