@@ -1,25 +1,25 @@
-name: Close Issues on Specific Commit Messages  
+name: Close Issues on Specific Commit Messages
+
+on:
+  push:
+    branches:
+      - master
   
-on:  
-  push:  
-    branches:  
-      - master  
+jobs:
+  close-issue-based-on-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
   
-jobs:  
-  close-issue-based-on-commit:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Checkout code  
-        uses: actions/checkout@v3  
+      - name: Check commit message and close issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
   
-      - name: Check commit message and close issues  
-        env:  
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-        run: |  
-          COMMIT_MSG=$(git log -1 --pretty=%B)  
-  
-          # Define target commit messages and corresponding issue numbers  
-          declare -A TARGET_MESSAGES  
+          # 定义目标提交消息及对应的 issue 编号
+          declare -A TARGET_MESSAGES
           TARGET_MESSAGES["1.0101--项目规划_文档编写_需求文档编写--何泽中--2024/07/03"]=2
           TARGET_MESSAGES["1.0102--项目规划_文档编写_功能文档编写--何泽中--2024/07/03"]=3
           TARGET_MESSAGES["1.0201--项目规划_图片绘制_简易ui绘制--何泽中--2024/07/03"]=4
@@ -43,19 +43,19 @@ jobs:
           TARGET_MESSAGES["4.1100--自动化代码格式规范检查、测试、打包_自动化代码格式检查、测试用例检查--何泽中"]=22
           TARGET_MESSAGES["4.2100--自动化代码格式规范检查、测试、打包_自动化打包--何泽中--2024/07/11"]=23
   
-          # Iterate over the target messages and check if the commit message matches  
+          # 遍历目标消息，检查提交消息是否匹配
           for msg in "${!TARGET_MESSAGES[@]}"; do  
             if [ "$COMMIT_MSG" = "$msg" ]; then  
               ISSUE_NUMBER=${TARGET_MESSAGES[$msg]}  
-              echo "Closing issue #$ISSUE_NUMBER because the commit message matches: $msg"  
-              curl -X PATCH \  
-                -H "Accept: application/vnd.github.v3+json" \  
-                -H "Authorization: token $GITHUB_TOKEN" \  
-                -d '{"state": "closed"}' \  
-                https://api.github.com/repos/cave_forum/issues/$ISSUE_NUMBER  
-              break # Stop the loop once a match is found  
+              echo "关闭 issue #$ISSUE_NUMBER，因为提交消息匹配：$msg"  
+              curl -X PATCH \
+                -H "Accept: application/vnd.github.v3+json" \
+                -H "Authorization: token $GITHUB_TOKEN" \
+                -d '{"state": "closed"}' \
+                "https://api.github.com/repos/wamg2023/cave_forum/issues/$ISSUE_NUMBER"
+              break # 找到匹配项后停止循环
             fi  
-          done  
+          done
   
-          # If no match is found, you can optionally print a message here  
-          # ...
+          # 如果找不到匹配项，可以选择在此处打印消息
+          # echo "未找到匹配的提交消息."
