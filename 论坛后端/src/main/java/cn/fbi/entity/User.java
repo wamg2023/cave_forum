@@ -19,7 +19,7 @@ import java.util.Date;
  * */
 @Data
 public class User {
-    private Integer user_id;//用户id
+    private int user_id;//用户id
     private Integer type;//用户类型
     private String account;//账号
     private String password;//用户密码

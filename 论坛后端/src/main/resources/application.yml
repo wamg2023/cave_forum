@@ -41,6 +41,8 @@ spring:
 
 # MyBatis Plus配置
 mybatis-plus:
+    configuration:
+        map-underscore-to-camel-case: false
     global-config:
         db-config:
             id-type: auto

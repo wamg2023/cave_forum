@@ -15,5 +15,6 @@ public interface UserService extends IService<User> {
     public List<User> getUser() ;
     /** 用户注册 */
     public Result Register(User user);
-
+    /** 用户通过账号密码进行登录 */
+    public Result loginByAccount(User user);
 }
