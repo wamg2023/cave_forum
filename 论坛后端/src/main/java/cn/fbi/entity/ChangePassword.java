@@ -7,9 +7,9 @@ import lombok.Data;
  * */
 @Data
 public class ChangePassword {
-    private String username;
-    private String old_password;
-    private String new_password;
-    private String again_new_password;
-    private String verifyCode;
+    private String account;//用户账号
+    private String oldPassword;//旧密码
+    private String newPassword;//新密码
+    private String email;//用户邮箱
+    private String captcha;//验证码
 }

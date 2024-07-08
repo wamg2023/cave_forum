@@ -53,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /** 检查生成的userId是否已存在 */
     private boolean userIdExists(String userId) {
         QueryWrapper<User> qw =new QueryWrapper<>();
-        qw.eq("userid", userId);
+        qw.eq("user_id", userId);
         return userMapper.selectCount(qw) > 0;
     }
 
@@ -85,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     //生成用户头像存储路径
                     String avatar = userID + "Avatar.png";
                     int userId = Integer.parseInt(userID);
-                    user.setUserid(userId);
+                    user.setUser_id(userId);
                     user.setAvatar(avatar);
                     //插入新用户
                     userMapper.insert(user);
@@ -94,5 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     return Result.Success("注册成功");
             }
     }
+
+    
 
 }

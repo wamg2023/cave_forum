@@ -3,7 +3,7 @@ server:
 
 # 文件上传目录配置
 file:
-    upload-dir: /file
+    upload-dir: files/
 
 # 数据库连接配置
 spring:
