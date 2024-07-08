@@ -20,7 +20,7 @@ jobs:
       - name: 创建jdk
         uses: actions/setup-java@v4
         with:
-          java-version: '17'  # 设置所需的Java版本
+          java-version: '11'  # 设置所需的Java版本
           distribution: 'adopt'  # 使用adoptopenjdk作为Java发行版本
 
 
