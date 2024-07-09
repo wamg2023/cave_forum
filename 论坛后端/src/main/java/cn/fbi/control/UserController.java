@@ -5,6 +5,7 @@ import cn.fbi.entity.ChangePassword;
 import cn.fbi.entity.User;
 import cn.fbi.service.UserService;
 import jakarta.annotation.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
@@ -17,69 +18,45 @@ import java.io.IOException;
 public class UserController {
     @Resource
     private UserService userService;
-    /** 用户注册 */
+    /** 用户注册请求 */
     @PostMapping ("/register")
     public Result register(@RequestBody User user){
         return userService.Register(user);
     }
+    /** 获取用户个人资料请求 */
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String token) {
+        return userService.getUserProfile(token);
+    }
 
-    /** 用户登录，通过账号密码进行登录 */
+    /** 用户登录请求，通过账号密码进行登录 */
     @PostMapping("/loginByAccount")
     public Result loginByAccount(@RequestBody User user){
         return userService.loginByAccount(user);
     }
 
-    //注销功能,删除表
+    /** 用户登录请求，通过邮箱验证码进行登录 */
+    @PostMapping("/loginByEmail")
+    public Result loginByEmail(@RequestBody User user){
+        return userService.loginByEmail(user);
+    }
+
+    /** 用户退出登录请求 */
     @DeleteMapping("/logout")
-    public Result logout(@RequestBody User user){
-        /*String username = user.getUsername();
-        String password = user.getPassword();
-        User tempUser=userMapper.selectUserID(username,password);
-        if(tempUser==null)
-            return Result.Error("注销失败，用户名或密码错误");
-        else{
-            String account=user.getUsername();
-            QueryWrapper<User> qw=new QueryWrapper<>();
-            qw.eq("username",account);
-            userMapper.delete(qw);
-            return Result.Success("用户注销成功！");
-        }*/
-        return Result.Success("ss");
+    public Result logout(){
+        return userService.logOut();
     }
 
-    //普通修改密码
+    /** 通过账号密码验证修改密码请求 */
     @PostMapping("/changePwdByAccount")
-    public Result ChangePw(@RequestBody ChangePassword changePassword){
-        /*//读取数据
-        String Username =changePassword.getUsername();
-        String OldPassWord=changePassword.getOld_password();
-        String NewPassword=changePassword.getNew_password();
-        String AgainNewPassWord=changePassword.getAgain_new_password();
-        //判断前后两次新密码输入是否一致
-        if(NewPassword.equals(AgainNewPassWord)){
-            //判断用户名和旧密码是否对应，即确报用户本人修改
-            User tempUser=userMapper.selectUserID(Username,OldPassWord);
-            if (tempUser!=null){
-                //修改密码
-                UpdateWrapper<User> uW = new UpdateWrapper<>();
-                uW.eq("username", Username);
-                User user = new User();
-                user.setPassword(NewPassword);
-                userMapper.update(user,uW);
-                return Result.Success("密码修改成功");
-            }
-            else{
-                return Result.Error("用户名或密码输入错误");
-            }
-
-        }else{
-            return Result.Error("两次新密码输入不一致，请重新输入");
-        }*/
-        return null;
+    public Result changePwdByAccount(@RequestBody ChangePassword changePassword){
+        return userService.changePwdByAccount(changePassword);
     }
 
+    /** 通过邮箱验证码修改密码请求 */
     @PostMapping("/changePwdByEmail")
-    public Result ChangePwByMail(@RequestBody ChangePassword changePassword){
+    public Result ChangePwdByMail(@RequestBody ChangePassword changePassword){
+        return userService.changePwdByMail(changePassword);
       /*  String storedVerifyCode = (String) redisTemplate.opsForValue().get("verifyCode");
         if (storedVerifyCode == null) {
             return Result.Error("邮箱验证码已过期，请重新获取验证码！");
@@ -108,8 +85,6 @@ public class UserController {
         else{
             return Result.Error("用户名或密码输入错误");
         }*/
-        return null;
-
     }
 
 

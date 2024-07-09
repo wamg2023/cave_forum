@@ -1,6 +1,7 @@
 package cn.fbi.service;
 
 import cn.fbi.control.EmailController;
+import cn.fbi.entity.EmailVerifyCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,13 @@ public class EmailService {
     public void sendVerifyCode(String to) {
         SimpleMailMessage message = new SimpleMailMessage();
         String verificationCode = this.generateVerificationCode();
-        //将验证码存入redis中，并设置有效时间为5分钟
-        redisTemplate.opsForValue().set("verify_code",verificationCode, Duration.ofMinutes(5));
+        //将邮箱及验证码存入redis中，并设置有效时间为5分钟
+        EmailVerifyCode emailVerifyCode = new EmailVerifyCode();
+        emailVerifyCode.setEmail(to);
+        emailVerifyCode.setVerify_code(verificationCode);
+        redisTemplate.opsForValue().set("email_verifyCode",emailVerifyCode, Duration.ofMinutes(5));
+
+//        redisTemplate.opsForValue().set("verify_code",verificationCode, Duration.ofMinutes(5));
         String subject = "验证码";
         String text = "亲爱的用户：\n" +
                 "欢迎访问巨洞游戏论坛，您本次操作的验证码为：\n\n" +
