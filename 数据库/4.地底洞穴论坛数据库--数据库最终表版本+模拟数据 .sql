@@ -35,7 +35,7 @@ CREATE TABLE `comment` (
 
 /*Data for the table `comment` */
 
-insert  into `comment`(`comment_id`,`content`,`create_time`,`comment_like_count`,`comment_comment_count`,`user_id`,`post_id`,`root_comment_id`,`to_comment_id`) values (1,'test用户1（于post_id=1）评论1：这有一个新的游戏','2000-01-01',0,0,3,1,-1,-1),(2,'test用户1（于post_id=3）评论1：看上去还不错','2000-01-01',0,0,3,3,-1,-1),(3,'test用户2（于post_id=3）评论1：有点意思','2000-01-01',0,0,4,3,-1,-1),(4,'test用户2（于post_id=5）评论1：我来帮你，我做个攻略','2000-01-01',0,0,4,5,-1,-1),(5,'test用户1（于post_id=5回复CommentId=4）评论1：谢谢大佬','2000-01-01',0,0,3,5,4,4),(6,'test用户2（于post_id=5回复commentId=5）评论2：攻略已经发出来啦','2000-01-01',0,0,4,5,4,5),(7,'test用户1（于post_id=6）评论1：感谢大佬的帮助！！！','2000-01-01',0,0,3,6,-1,-1),(8,'test用户2（于post_id=6回复commentId=7）评论1：小菜一碟~~~','2000-01-01',0,0,4,4,7,7);
+insert  into `comment`(`comment_id`,`content`,`create_time`,`comment_like_count`,`comment_comment_count`,`user_id`,`post_id`,`root_comment_id`,`to_comment_id`) values (1,'test用户1（于post_id=1）评论1：这有一个新的游戏','2000-01-01',0,0,3,1,-1,-1),(2,'test用户1（于post_id=3）评论1：看上去还不错','2000-01-01',0,0,3,3,-1,-1),(3,'test用户2（于post_id=3）评论1：有点意思','2000-01-01',1,0,4,3,-1,-1),(4,'test用户2（于post_id=5）评论1：我来帮你，我做个攻略','2000-01-03',3,2,4,5,-1,-1),(5,'test用户1（于post_id=5回复CommentId=4）评论1：谢谢大佬','2000-01-04',1,1,3,5,4,4),(6,'test用户2（于post_id=5回复commentId=5）评论2：攻略已经发出来啦','2000-01-05',2,0,4,5,4,5),(7,'test用户1（于post_id=6）评论1：感谢大佬的帮助！！！','2000-01-05',1,1,3,6,-1,-1),(8,'test用户2（于post_id=6回复commentId=7）评论1：小菜一碟~~~','2000-01-06',1,0,4,4,7,7);
 
 /*Table structure for table `post` */
 
@@ -57,7 +57,7 @@ CREATE TABLE `post` (
 
 /*Data for the table `post` */
 
-insert  into `post`(`post_id`,`title`,`content`,`create_time`,`cover`,`post_like_count`,`post_bookmark_count`,`post_comment_count`,`tag_id`,`user_id`) values (1,'test管理员1标题1：新的游戏论坛','test管理员1内容1','2000-01-01','1Cover.png',0,0,0,1,1),(2,'test管理员1标题2：更新公告','test管理员1内容2','2000-01-01','2Cover.png',0,0,0,1,1),(3,'test管理员2标题1：新的活动！','test管理员2内容1','2000-01-01','3Cover.png',0,0,0,1,2),(4,'test用户1标题1：好玩，爱玩','test用户1内容1','2000-01-01','4Cover.png',0,0,0,4,3),(5,'test用户1标题2：打不过求助','test用户1内容2','2000-01-01','5Cover.png',0,0,0,3,3),(6,'test用户2标题2：***攻略','test用户2内容2','2000-01-01','6Cover.png',0,0,0,2,4);
+insert  into `post`(`post_id`,`title`,`content`,`create_time`,`cover`,`post_like_count`,`post_bookmark_count`,`post_comment_count`,`tag_id`,`user_id`) values (1,'test管理员1标题1：新的游戏论坛','test管理员1内容1','2000-01-01','1Cover.png',4,2,1,1,1),(2,'test管理员1标题2：更新公告','test管理员1内容2','2000-01-01','2Cover.png',4,0,0,1,1),(3,'test管理员2标题1：新的活动！','test管理员2内容1','2000-01-02','3Cover.png',4,1,2,1,2),(4,'test用户1标题1：好玩，爱玩','test用户1内容1','2000-01-02','4Cover.png',2,0,0,4,3),(5,'test用户1标题2：打不过求助','test用户1内容2','2000-01-03','5Cover.png',2,0,3,3,3),(6,'test用户2标题2：***攻略','test用户2内容2','2000-01-05','6Cover.png',4,4,2,2,4);
 
 /*Table structure for table `tag` */
 
@@ -96,7 +96,7 @@ CREATE TABLE `user` (
 
 /*Data for the table `user` */
 
-insert  into `user`(`user_id`,`type`,`account`,`password`,`nickname`,`birthday`,`email`,`avatar`,`follow_user`,`like_post`,`bookmark_post`,`like_comment`,`verify_code`) values (0,0,'111','123456789','test管理员1','2000-01-01','test1@itcast.cn','0Avatar.png','null','null','null','null',NULL),(1,0,'222','123456789','test管理员2','2000-01-01','test2@itcast.cn','1Avatar.png','null','null','null','null',NULL),(2,1,'111111','123456789','test用户1','2000-01-01','test用户1@itcast.cn','2Avatar.png','null','null','null','null',NULL),(3,1,'222222','123456789','test用户2','2000-01-01','test用户2@itcast.cn','3Avatar.png','null','null','null','null',NULL);
+insert  into `user`(`user_id`,`type`,`account`,`password`,`nickname`,`birthday`,`email`,`avatar`,`follow_user`,`like_post`,`bookmark_post`,`like_comment`,`verify_code`) values (0,0,'111','123456789','test管理员1','2000-01-01','test1@itcast.cn','111Avatar.png','null','1,2,3,6','6','4,6',NULL),(1,0,'222','123456789','test管理员2','2000-01-01','test2@itcast.cn','222Avatar.png','null','1,2,3,6','6','4',NULL),(2,1,'111111','123456789','test用户1','2000-01-01','test用户1@itcast.cn','111111Avatar.png','0,1,3','1,2,3,4,5,6','1,6','4,6,8',NULL),(3,1,'222222','123456789','test用户2','2000-01-01','test用户2@itcast.cn','222222Avatar.png','2','1,2,3,4,5,6','1,3,6','3,5,7',NULL);
 
 /* Trigger structure for table `user` */
 
