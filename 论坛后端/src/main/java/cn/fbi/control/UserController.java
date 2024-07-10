@@ -1,11 +1,10 @@
 package cn.fbi.control;
 
 import cn.fbi.common.Result;
-import cn.fbi.entity.ChangePassword;
+import cn.fbi.common.ChangePassword;
 import cn.fbi.entity.User;
 import cn.fbi.service.UserService;
 import jakarta.annotation.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
@@ -18,14 +17,16 @@ import java.io.IOException;
 public class UserController {
     @Resource
     private UserService userService;
+
     /** 用户注册请求 */
     @PostMapping ("/register")
     public Result register(@RequestBody User user){
         return userService.Register(user);
     }
+
     /** 获取用户个人资料请求 */
     @GetMapping("/profile")
-    public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String token) {
+    public Result getUserProfile(@RequestHeader("Authorization") String token) {
         return userService.getUserProfile(token);
     }
 
@@ -57,53 +58,28 @@ public class UserController {
     @PostMapping("/changePwdByEmail")
     public Result ChangePwdByMail(@RequestBody ChangePassword changePassword){
         return userService.changePwdByMail(changePassword);
-      /*  String storedVerifyCode = (String) redisTemplate.opsForValue().get("verifyCode");
-        if (storedVerifyCode == null) {
-            return Result.Error("邮箱验证码已过期，请重新获取验证码！");
-        }
-        String userVerifyCode = changePassword.getVerifyCode();
-        if (!storedVerifyCode.equals(userVerifyCode)) {
-            return Result.Error("邮箱验证码不正确，请重新输入验证码");
-        }
-        //读取数据
-        String Username =changePassword.getUsername();
-        String OldPassWord=changePassword.getOld_password();
-        String NewPassword=changePassword.getNew_password();
-        String AgainNewPassWord=changePassword.getAgain_new_password();
-        //判断用户名和旧密码是否对应，即确报用户本人修改
+    }
 
+    /** 查看某人信息请求 */
+    @GetMapping("/getUserProfileByAccount")
+    public Result getUserProfileByAccount(@RequestBody User user) {
+        return userService.getUserProfileByAccount(user);
+    }
 
-        if (tempUser!=null){
-            //修改密码
-            UpdateWrapper<User> uW = new UpdateWrapper<>();
-            uW.eq("username", Username);
-            User user = new User();
-            user.setPassword(NewPassword);
-            userMapper.update(user,uW);
-            return Result.Success("密码修改成功");
-        }
-        else{
-            return Result.Error("用户名或密码输入错误");
-        }*/
+    /** 修改用户信息请求 */
+    @PostMapping("/changeUserProfile")
+    public Result changeUserProfile(@RequestBody User user) {
+        return userService.changeUserProfile(user);
+    }
+
+    /** 获取关注的人的信息请求 */
+    @GetMapping("/getFollowUser")
+    public Result getFollowUser(){
+        return userService.getFollowUser();
     }
 
 
 
-
-
-    /*@GetMapping("/redis")
-    public void getRedis() {
-        redisTemplate.opsForValue().set("name","卷心");
-        String name = (String) redisTemplate.opsForValue().get("name");
-        //System.out.println(name); //卷心菜
-    }
-
-    @PostMapping("/setRedis")
-    public RedisUser setUser(@RequestBody RedisUser user){
-        redisTemplate.opsForValue().set("user",user, Duration.ofMinutes(5));
-        return (RedisUser)redisTemplate.opsForValue().get("user");
-    }
-*/
 
     /**
      * 7.

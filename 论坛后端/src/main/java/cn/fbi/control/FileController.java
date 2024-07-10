@@ -17,14 +17,14 @@ public class FileController {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
     @Value("${file.upload-dir}")
     private String uploadDir;
-    @PostMapping("/upload/{userId}")
-    public String uploadAvatar(@PathVariable String userId, @RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload/{account}")
+    public String uploadAvatar(@PathVariable String account, @RequestParam("file") MultipartFile file) {
         // 校验文件类型
         if (!file.getContentType().startsWith("image")) {
             return "文件格式不支持";
         }
         // 生成文件名
-        String fileName = userId + "Avatar.png";
+        String fileName = account + "Avatar.png";
 
         try {
             // 检查并创建目录
@@ -52,9 +52,9 @@ public class FileController {
         }
     }
 
-    @GetMapping("/download/{userId}")
-    public byte[] downloadAvatar(@PathVariable String userId) throws IOException {
-        String fileName = userId + "Avatar.png";
+    @GetMapping("/download/{account}")
+    public byte[] downloadAvatar(@PathVariable String account) throws IOException {
+        String fileName = account + "Avatar.png";
         Path filePath = Paths.get(uploadDir + fileName);
         return Files.readAllBytes(filePath);
     }
