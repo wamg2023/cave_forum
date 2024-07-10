@@ -43,10 +43,35 @@ public class EmailService {
         EmailVerifyCode emailVerifyCode = new EmailVerifyCode();
         emailVerifyCode.setEmail(to);
         emailVerifyCode.setVerify_code(verificationCode);
-        redisTemplate.opsForValue().set("email_verifyCode",emailVerifyCode, Duration.ofMinutes(5));
+        redisTemplate.opsForValue().set("login_email_verifyCode",emailVerifyCode, Duration.ofMinutes(5));
         String subject = "Genshin Impact";
-        String text = "亲爱的用户：\n" +
-                "欢迎使用原神游戏论坛，您本次操作的验证码为：\n\n" +
+        String text = "亲爱的用户：欢迎访问原神游戏论坛！\n" +
+                "您正在使用当前邮箱注册账号，您本次操作的验证码为：\n\n" +
+                verificationCode + "\n\n" +
+                "此验证码5分钟内有效，请立即进行下一步操作。 如非你本人操作，请忽略此邮件。\n" +
+                "感谢您的使用！";
+        message.setFrom("15294798563@163.com");
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        mailSender.send(message);
+        logger.info("验证码发送成功！"+"  本次验证码为： "+verificationCode+"  有效时间：5min");
+    }
+
+    /** 注册时发送邮箱验证码
+     * @Parm Sring to ,要发送的邮箱地址
+     * */
+    public void sendChangePwdVerifyCode(String to) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        String verificationCode = this.generateVerificationCode();
+        //将邮箱及验证码存入redis中，并设置有效时间为5分钟
+        EmailVerifyCode emailVerifyCode = new EmailVerifyCode();
+        emailVerifyCode.setEmail(to);
+        emailVerifyCode.setVerify_code(verificationCode);
+        redisTemplate.opsForValue().set("changePwd_email_verifyCode",emailVerifyCode, Duration.ofMinutes(5));
+        String subject = "Genshin Impact";
+        String text = "亲爱的用户：欢迎访问原神游戏论坛！\n" +
+                "您正在使用当前邮箱更改密码，您本次操作的验证码为：\n\n" +
                 verificationCode + "\n\n" +
                 "此验证码5分钟内有效，请立即进行下一步操作。 如非你本人操作，请忽略此邮件。\n" +
                 "感谢您的使用！";

@@ -135,7 +135,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 生成6位不重复的ID
             String userID = this.getUserId_str(6);
             //生成用户头像存储路径
-            String avatar = userID + "Avatar.png";
+            String avatar = account + "Avatar.png";
             int userId = Integer.parseInt(userID);
             user.setUser_id(userId);
             user.setAvatar(avatar);
@@ -216,6 +216,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 邮箱验证码登录方法实现
      */
+
     public Result loginByEmail(User user) {
         //缓存用户账号与token的数据类型
         LoginUserToken loginUserToken = new LoginUserToken();
@@ -223,7 +224,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LoginResult loginResult = new LoginResult();
         String email = user.getEmail();
         String verifyCode = user.getVerify_code();
-        EmailVerifyCode email_verifyCode = (EmailVerifyCode) redisTemplate.opsForValue().get("email_verifyCode");
+        EmailVerifyCode email_verifyCode = (EmailVerifyCode) redisTemplate.opsForValue().get("login_email_verifyCode");
         //前端传来的验证码与redis中存储的验证码一致，返回用户信息，反之，则返回报错信息，无效Token
         if (verifyCode.equals(email_verifyCode.getVerify_code()) && email.equals(email_verifyCode.getEmail())) {
             //登录成功，返回用户信息
@@ -243,6 +244,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             logger.info("用户登录成功！！！当前登录用户的token是:  " + token);
             loginResult.setUser(loginUser);
             loginResult.setToken(token);
+            //将redis缓存表中的数据清空
+            redisTemplate.delete("login_email_verifyCode");
             return Result.Success("登录成功！", loginResult);
         } else {
             //生成日志
@@ -302,7 +305,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         qw.eq("email", email);
         User tempUser = userMapper.selectOne(qw);
         if (tempUser != null) {
-            EmailVerifyCode email_verifyCode = (EmailVerifyCode) redisTemplate.opsForValue().get("email_verifyCode");
+            EmailVerifyCode email_verifyCode = (EmailVerifyCode) redisTemplate.opsForValue().get("changePwd_email_verifyCode");
             if (verifyCode.equals(email_verifyCode.getVerify_code()) && email.equals(email_verifyCode.getEmail())) {
                 //修改密码
                 UpdateWrapper<User> uW = new UpdateWrapper<>();
@@ -310,6 +313,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 String NewPassword = changePassword.getNewPassword();
                 tempUser.setPassword(NewPassword);
                 userMapper.update(tempUser, uW);
+                //将redis缓存表中的数据清空
+                redisTemplate.delete("changePwd_email_verifyCode");
                 //生成日志
                 logger.info("密码修改成功,用户：{}     当前的密码是：{}", tempUser.getAccount(), NewPassword);
                 return Result.Success("密码修改成功");
@@ -352,19 +357,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 修改用户信息方法实习
      */
     public Result changeUserProfile(User user) {
-        //获取用户账号信息
-        String account = user.getAccount();
-        //根据用户账号查找对应用户
-        QueryWrapper<User> qw = new QueryWrapper<>();
-        qw.eq("account", account);
-        User tempUser = userMapper.selectOne(qw);
+
+        User tempUser = this.getLoginUser();
         //更新该用户
         UpdateWrapper<User> uw = new UpdateWrapper<>();
-        uw.eq("account", account);
+        uw.eq("account" , tempUser.getAccount());
         String newNickName = user.getNickname();
-        String newAvatar = user.getAvatar();
         tempUser.setNickname(newNickName);
-        tempUser.setAvatar(newAvatar);
         userMapper.update(tempUser, uw);
         //生成日志
         logger.info("修改用户信息，成功！！！");
@@ -379,26 +378,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<User> followUsers = new ArrayList<>();
         // 获取用户关注的人的ID的字符串
         String followerUserStr = user.getFollow_user();
-        System.out.println(followerUserStr);
-        // 将用户用户关注的人的ID的字符串转换为列表
-        List<String> followerUserIds = new ArrayList<>();
-        if (StringUtils.isNotBlank(followerUserStr)) {
-            followerUserIds = Arrays.asList(followerUserStr.split(","));
-        }
-        // 将所有关注用户的信息添加入列表
-        for (String follow_user : followerUserIds) {
-            int user_id = Integer.parseInt(follow_user);
-            User followUser = this.getUserById(user_id);
-            if (followUser != null) {
-                followUsers.add(followUser);
+        if(!followerUserStr.equals("null") && followerUserStr.length() != 0 ){
+            // 将用户用户关注的人的ID的字符串转换为列表
+            List<String> followerUserIds = new ArrayList<>();
+            if (StringUtils.isNotBlank(followerUserStr)) {
+                followerUserIds = Arrays.asList(followerUserStr.split(","));
             }
-        }
-        if (followUsers.isEmpty()) {
-            logger.info("请求获取关注用户信息，但目前无关注用户");
-            return Result.Error("无关注用户");
-        } else {
+            // 将所有关注用户的信息添加入列表
+            for (String follow_user : followerUserIds) {
+                int user_id = Integer.parseInt(follow_user);
+                User followUser = this.getUserById(user_id);
+                if (followUser != null) {
+                    followUsers.add(followUser);
+                }
+            }
             logger.info("关注用户信息获取成功！");
             return Result.Success("关注用户信息获取成功！",followUsers);
+
         }
+       else {
+            logger.info("请求获取关注用户信息，但目前无关注用户");
+            return Result.Error("无关注用户");
+        }
+
     }
 }
