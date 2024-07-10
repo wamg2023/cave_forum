@@ -3,6 +3,7 @@ package cn.fbi.mapper;
 import cn.fbi.entity.Comment;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -16,5 +17,8 @@ public interface CommentMapper extends BaseMapper<Comment> {
     /** 获取评论者的昵称 */
     @Select("select nickname from user where user_id=#{user_id}")
     String getUserNameById(int user_id);
+    /** 通过评论ID删除评论 */
+    @Delete("delete from comment where comment_id = #{comment_id}")
+    void deleteCommentById(int comment_id);
 
 }
