@@ -1,7 +1,7 @@
 package cn.fbi.service;
 
 import cn.fbi.control.EmailController;
-import cn.fbi.entity.EmailVerifyCode;
+import cn.fbi.common.EmailVerifyCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import java.time.Duration;
 import java.util.Random;
 
@@ -34,6 +33,9 @@ public class EmailService {
     private String generateVerificationCode() {
         return String.format("%04d", new Random().nextInt(10000));
     }
+    /** 发送邮箱验证码
+     * @Parm Sring to ,要发送的邮箱地址
+     * */
     public void sendVerifyCode(String to) {
         SimpleMailMessage message = new SimpleMailMessage();
         String verificationCode = this.generateVerificationCode();
@@ -42,11 +44,9 @@ public class EmailService {
         emailVerifyCode.setEmail(to);
         emailVerifyCode.setVerify_code(verificationCode);
         redisTemplate.opsForValue().set("email_verifyCode",emailVerifyCode, Duration.ofMinutes(5));
-
-//        redisTemplate.opsForValue().set("verify_code",verificationCode, Duration.ofMinutes(5));
-        String subject = "验证码";
+        String subject = "Genshin Impact";
         String text = "亲爱的用户：\n" +
-                "欢迎访问巨洞游戏论坛，您本次操作的验证码为：\n\n" +
+                "欢迎使用原神游戏论坛，您本次操作的验证码为：\n\n" +
                 verificationCode + "\n\n" +
                 "此验证码5分钟内有效，请立即进行下一步操作。 如非你本人操作，请忽略此邮件。\n" +
                 "感谢您的使用！";

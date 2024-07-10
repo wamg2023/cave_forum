@@ -1,4 +1,4 @@
-package cn.fbi.entity;
+package cn.fbi.common;
 
 import lombok.Data;
 

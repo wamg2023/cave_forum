@@ -19,14 +19,14 @@
     function uploadFile() {
         var fileInput = document.getElementById('fileInput');
         var file = fileInput.files[0];
-        var userId = '631210'; // 替换为实际的用户ID
+        var account = 'wskTest3'; // 替换为实际的用户ID
 
         var formData = new FormData();
         formData.append("file", file);
 
         $.ajax({
             type: "POST",
-            url: "/file/upload/" + userId,
+            url: "/file/upload/" + account,
             data: formData,
             processData: false,
             contentType: false,
@@ -42,8 +42,8 @@
     }
 
     function downloadFile() {
-        var userId = '631210'; // 替换为实际的用户ID
-        var downloadUrl = "/file/download/" + userId;
+        var account = 'wskTest3'; // 替换为实际的用户ID
+        var downloadUrl = "/file/download/" + account;
 
         $.ajax({
             type: "GET",

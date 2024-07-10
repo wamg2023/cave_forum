@@ -17,7 +17,7 @@ public class Post {
     private String title; // 帖子标题
     private String content; // 帖子内容
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime; // 帖子发布时间
     private String cover; // 帖子封面
     private Integer postLikeCount; // 帖子点赞数
