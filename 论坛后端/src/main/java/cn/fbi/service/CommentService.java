@@ -17,4 +17,6 @@ public interface CommentService {
     Result postComment(Comment comment);
     /** 点赞评论 */
     Result likeComment(Comment comment);
+    /** 删除评论*/
+    Result deleteComment(Comment comment);
 }

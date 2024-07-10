@@ -36,4 +36,10 @@ public class CommentController {
         return commentService.likeComment(comment);
     }
 
+    /** 删除评论请求 */
+    @DeleteMapping("/deleteComment")
+    public Result DeleteComment(@RequestBody Comment comment){
+        return commentService.deleteComment(comment);
+    }
+
 }

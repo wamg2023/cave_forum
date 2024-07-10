@@ -62,6 +62,23 @@ private RedisTemplate<String, Object> redisTemplate;
         return user.getNickname();
     }
 
+    /** 根据评论id查找该评论的根评论的ID */
+    private int getRootCommentIDById(int comment_id) {
+        QueryWrapper<Comment> qw = new QueryWrapper<>();
+        qw.eq("comment_id", comment_id);
+        Comment comment = commentMapper.selectOne(qw);
+        return comment.getRoot_comment_id();
+    }
+
+    /** 根据评论id查找该评论 */
+    private Comment getCommentById(int comment_id) {
+        QueryWrapper<Comment> qw = new QueryWrapper<>();
+        qw.eq("comment_id", comment_id);
+        Comment comment = commentMapper.selectOne(qw);
+        return comment;
+    }
+
+
     /** 生成随机的n位数字作为ID */
     private String generateRandomId(int length) {
         Random random = new Random();
@@ -238,7 +255,7 @@ private RedisTemplate<String, Object> redisTemplate;
         return Result.Success("评论成功！！！");
     }
 
-    /** 点赞评论 */
+    /** 点赞评论方法实现 */
     public Result likeComment(Comment comment) {
         int comment_id = comment.getComment_id();
         User user = this.getLoginUser();
@@ -295,6 +312,33 @@ private RedisTemplate<String, Object> redisTemplate;
         }
     }
 
+    /** 删除评论实现*/
+    public Result deleteComment(Comment comment){
+        //获取评论ID
+        int comment_id = comment.getComment_id();
+        //判断该评论是否是根评论
+        int root_comment_id = this.getRootCommentIDById(comment_id);
+        //如果是根评论，找出所有的子评论并删除
+        if(root_comment_id == -1){
+            //删除子评论
+            QueryWrapper<Comment> qW1 = new QueryWrapper<>();
+            qW1.eq("root_comment_id", comment_id);
+            commentMapper.delete(qW1);
+            //删除根评论
+            QueryWrapper<Comment> qW2 = new QueryWrapper<>();
+            qW2.eq("comment_id", comment_id);
+            commentMapper.delete(qW2);
+            logger.info("评论删除成功！删除了根评论{}及其所有的子评论",comment_id);
+            return Result.Success("评论删除成功！");
+        }else {
+            //如果要删除的是子评论，直接删除该评论
+            QueryWrapper<Comment> qW = new QueryWrapper<>();
+            qW.eq("comment_id", comment_id);
+            commentMapper.delete(qW);
+            logger.info("评论删除成功！！！！");
+            return Result.Success("评论删除成功！");
+        }
+    }
 
 }
 
