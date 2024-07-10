@@ -26,7 +26,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/file/upload/" + userId,
+            url: "/file/uploadPost/" + userId,
             data: formData,
             processData: false,
             contentType: false,
@@ -43,7 +43,7 @@
 
     function downloadFile() {
         var userId = '631210'; // 替换为实际的用户ID
-        var downloadUrl = "/file/download/" + userId;
+        var downloadUrl = "/file/downloadPost/" + userId;
 
         $.ajax({
             type: "GET",

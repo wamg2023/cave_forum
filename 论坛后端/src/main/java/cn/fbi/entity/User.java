@@ -21,7 +21,7 @@ import java.util.Date;
 @Data
 public class User {
     private int user_id;//用户id
-    private Integer type;//用户类型
+    private int type;//用户类型
     private String account;//账号
     private String password;//用户密码
     private String nickname;//用户昵称
@@ -35,4 +35,5 @@ public class User {
     private String bookmark_post;//收藏的帖子
     private String like_comment;//点赞的评论
     private String verify_code;//验证码
+
 }
