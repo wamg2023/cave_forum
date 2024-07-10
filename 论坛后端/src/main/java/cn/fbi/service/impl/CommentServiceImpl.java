@@ -281,6 +281,7 @@ private RedisTemplate<String, Object> redisTemplate;
             uw1.eq("user_id",user.getUser_id());
             userMapper.update(user,uw1);
             // 评论点赞数加一
+            comment = this.getCommentById(comment_id);
             comment.setComment_like_count(comment.getComment_like_count() + 1);
             //更新评论信息
             UpdateWrapper<Comment> uw2 = new UpdateWrapper<>();
@@ -302,6 +303,7 @@ private RedisTemplate<String, Object> redisTemplate;
             uw1.eq("user_id",user.getUser_id());
             userMapper.update(user,uw1);
             // 评论点赞数减一
+            comment = this.getCommentById(comment_id);
             comment.setComment_like_count(comment.getComment_like_count() - 1);
             //更新评论信息
             UpdateWrapper<Comment> uw2 = new UpdateWrapper<>();
